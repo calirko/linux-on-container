@@ -1,0 +1,24 @@
+services:
+  desktop:
+    image: lscr.io/linuxserver/webtop:alpine-xfce
+    container_name: webtop
+    restart: unless-stopped
+    security_opt:
+      - seccomp:unconfined   # needed for Chromium/Firefox inside the desktop
+    environment:
+      PUID: 1000
+      PGID: 1000
+      TZ: ${TZ:-Etc/UTC}
+      TITLE: Linux Desktop
+      CUSTOM_USER: ${DESKTOP_USER:-admin}
+      PASSWORD: ${DESKTOP_PASSWORD:-changeme}
+    volumes:
+      - desktop-config:/config
+    ports:
+      - "${DESKTOP_PORT:-3000}:3000"
+    shm_size: "2gb"
+    mem_limit: ${MEM_LIMIT:-2g}
+    cpus: ${CPUS:-2}
+
+volumes:
+  desktop-config:
